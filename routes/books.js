@@ -4,6 +4,7 @@ const jsonschema = require("jsonschema");
 const Book = require("../models/book");
 const bookSchema = require("../schemas/bookSchema.json");
 const updateBookSchema = require("../schemas/updateBookSchema.json");
+const updateSomeFieldsSchema = require("../schemas/updateSomeFieldsSchema.json");
 
 const ExpressError = require("../expressError");
 
@@ -59,6 +60,21 @@ router.put("/:isbn", async function (req, res, next) {
 			return next(error);
 		}
 		const book = await Book.update(req.params.isbn, req.body);
+		return res.json({ book });
+	} catch (err) {
+		return next(err);
+	}
+});
+
+router.patch("/:isbn", async function (req, res, next) {
+	try {
+		const result = jsonschema.validate(req.body, updateSomeFieldsSchema);
+		if (!result.valid) {
+			const listOfErrors = result.errors.map((error) => error.stack);
+			const error = new ExpressError(listOfErrors, 400);
+			return next(error);
+		}
+		const book = await Book.updateSomeFields(req.params.isbn, req.body);
 		return res.json({ book });
 	} catch (err) {
 		return next(err);

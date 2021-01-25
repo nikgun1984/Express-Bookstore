@@ -114,6 +114,29 @@ describe("Book Routes Test", function () {
 		});
 	});
 
+	describe("PATCH /:isbn", function () {
+		test("update some book fields/PASS Test", async function () {
+			let response = await request(app).patch(`/books/978-0-9847828-5-7`).send({
+				amazon_url: "https://amazon.com/heal_or_not_heal",
+				language: "spanish",
+				pages: 432,
+				publisher: "New Publisher- Edition 2",
+				year: 2023,
+			});
+			expect(response.statusCode).toEqual(200);
+			expect(response.body).toEqual({
+				book: {
+					isbn: "978-0-9847828-5-7",
+					amazon_url: "https://amazon.com/heal_or_not_heal",
+					language: "spanish",
+					pages: 432,
+					publisher: "New Publisher- Edition 2",
+					year: 2023,
+				},
+			});
+		});
+	});
+
 	describe("DELETE /:isbn", function () {
 		test("delete a book", async function () {
 			let response = await request(app).delete(`/books/978-0-9847828-5-7`);

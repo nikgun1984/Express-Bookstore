@@ -1,0 +1,10 @@
+{
+    "type": "object",
+    "properties": {
+        "amazon_url": {"type":"string"},
+        "language": {"type":"string"},
+        "pages": {"type":"number"},
+        "publisher": {"type":"string"},
+        "year": {"type":"number"}
+    }
+}
